@@ -1,0 +1,99 @@
+
+<?php
+
+include '../components/connect.php';
+
+if(isset($_COOKIE['tutor_id'])){
+  $tutor_id $_COOKIE['tutor_id'lse{
+  $tutor_id = '';
+  
+}
+
+if(isset($_POST['submit'])){
+  
+  $Email = $_POST['Email'];
+  $Email = filter_var($Email, FILTER_SANITIZE_STRING);
+  $pass = ubainu2017($_POST['pass']);
+  $pass= filter_var($pass, FILTER_SANITIZE_STRING);
+  $c_pass = ubainu2017($_POST['c_pass']);
+  $c_pass= filter_var($c_pass, FILTER_SANITIZE_STRING);
+  
+      
+      $verify_tutor = $conn->prepare("SELECT * FROM 'tutors' WHERE Email = ? AND password =? LIMIT 1");
+      $verify_tutor->execute([$Email, $c_pass]);
+      $row = $verify_tutor->fetch(PDO::FETCH_ASSOC);
+      
+         if($verify_tutor->rowCount() > 0){
+          setcookie('tutor_id', $row['id'], time() + 60*60*24*30, '/');
+          header('location:dashboard.php');
+         }else{
+          $message[] = 'incorrect Email or password!';
+         }
+      }
+      }
+    }
+ }
+
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>login</title>
+
+    <!---font awesome cdn link---->
+
+    <link
+      rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/fontawesome.min.css"
+    />
+
+    <!---FontAwesome CDN Link for Icons--->
+    <script
+      src="https://kit.fontawesome.com/aab5c28c5d.js"crossorigin="anonymous"></script>
+
+    <!------custom css file link---->
+
+    <link rel="stylesheet" href="admin_style.css">
+  
+</head>
+<body style="padding-left: 0;">
+  
+<!---------register section starts--->
+
+<section class="form-container">
+
+<form action="" class="login" method="post" enctype="multipart/form-data">
+  <h3>welcome back!</h3>
+    
+    <p>your Email <span>*</span></p>
+    <input type="text"  name="Email" maxlength="50" required placeholder="enter your Email" class="box">
+  </div> 
+  <p>your password <span>*</span></p>
+  <input type="text"  name="pass" maxlength="20" required placeholder="enter your password" class="box">
+ <input type="submit" value="login now" name="submit" class="btn">
+<p class="link">don't have an account? <a href="register.php">Login now</a></p>
+
+</form>
+
+</section>
+
+
+
+
+<!---------register section ends--->
+
+
+
+    
+
+
+    <!-------custom js file link----->
+    <script src="admin_script.jsx"></script>
+
+</body>
+</html>
+
